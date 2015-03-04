@@ -1,4 +1,6 @@
 {
   "directory": "bower_components",
-  "json": "bower.json"
+  "json": "bower.json",
+  "registry": "http://localhost:5678",
+  "timeout": 300000
 }

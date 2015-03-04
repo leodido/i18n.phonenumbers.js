@@ -1,11 +1,11 @@
 {
-  "name": "libphonenumber.js",
-  "description": "",
-  "version": "0.0.1",
+  "name": "i18n-phonenumbers",
+  "description": "Parse, format, and validate international phone numbers through Google's libphonenumber",
+  "version": "0.0.0",
   "authors": [
     "Leo Di Donato <leodidonato@gmail.com> (http://git.io/leodido)"
   ],
-  "main": "libphonenumber.min.js",
+  "main": "i18n.phonenumbers.min.js",
   "license": "MIT",
   "ignore": [
     "**/.*",

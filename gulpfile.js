@@ -94,7 +94,13 @@ var settings = {
     'bower_components/libphonenumber/javascript/i18n/phonenumbers/phonenumber.pb.js',
     'bower_components/libphonenumber/javascript/i18n/phonenumbers/phonenumberutil.js',
     'bower_components/libphonenumber/javascript/i18n/phonenumbers/asyoutypeformatter.js',
-    'src/main.js'
+    'bower_components/libphonenumber/javascript/i18n/phonenumbers/regioncodefortesting.js',
+    'src/error.js',
+    'src/validation.result.js',
+    'src/type.js',
+    'src/format.js',
+    'src/phonenumbers.js',
+    'src/asyoutypeformatter.js'
   ],
   tests: [],
   metadata: {
@@ -112,7 +118,7 @@ var settings = {
  * // NOTE: test files need source files
  */
 settings.tests = settings.sources.concat([
-  'bower_components/libphonenumber/javascript/i18n/phonenumbers/regioncodefortesting.js',
+  // 'bower_components/libphonenumber/javascript/i18n/phonenumbers/regioncodefortesting.js',
   // 'bower_components/libphonenumber/javascript/i18n/phonenumbers/phonenumberutil_test.js', // FIXME
   'bower_components/libphonenumber/javascript/i18n/phonenumbers/asyoutypeformatter_test.js'
 ]);

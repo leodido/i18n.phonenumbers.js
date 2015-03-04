@@ -1,18 +1,17 @@
-Date elements
-=============
+I18n phone numbers
+==================
 
-**AngularJS select directives for date elements**.
+**Parse, format, and validate international phone numbers through Google's libphonenumber**.
 
-[![Bower](https://img.shields.io/bower/v/ng-date-elements.svg?style=flat-square)]()
+[![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)]()
 
-### Directives:
+This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version of Google's libphonenumber.
 
-- MonthSelect
-- YearSelect
-- SelectComposite
-- ExpirySelect
+There are two available libraries:
 
-*WIP*
+1. with full metadata
+
+2. with lite metadata (lacks example numbers)
 
 Usage
 -----
@@ -25,18 +24,38 @@ Install
 Install it via `bower`.
 
 ```
-bower install ng-date-elements
+bower install i18n-phonenumbers
 ```
 
-Or, you can clone this repo and install it locally (you will need `npm`, of course).
+Otherwise you can simply grab `i18n.phonenumbers.min.js` file/s in the repository root.
 
-```
-$ git clone git@github.com:leodido/ng-date-elements.git
-$ cd ng-date-elements/
-$ npm install
-```
+Update
+------
 
-Otherwise you can simply grab `date-elements.min.js` file in the repository root, and include it together with angular (~1.3) in your HTML page.
+Have googlers committed new metadata or something else?
+
+No problem, ping me ([@leodido](https://twitter.com/leodido)) and I will update it to the last release of Google's libphonenumber.
+
+Or simply **DIY**.
+
+1. Clone this repo
+
+    ```
+    $ git clone git@github.com:leodido/ni18n.phonenumbers.js.git
+    $ cd i18n.phonenumbers.js/
+    ```
+
+2. Install it locally (you will need `npm`, of course) ...
+    
+    ```
+    $ npm install
+    ```
+
+3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**.
+
+    ```
+    $ npm run release
+    ```
 
 Build
 -----
@@ -50,35 +69,36 @@ Need help? Run `gulp help` !
 #   gulp [task]
 # 
 # Available tasks
-#   build                                   Build the library 
-#    --banner                               Prepend banner to the built file
-#    --env=production|development           Kind of build to perform, defaults to production
+#   build                                   Build the library from source files 
+#    --target=full|lite|test                Files to use
 #   bump                                    Bump version up for a new release 
-#    --level=major|minor|patch|prerelease   Version level to bump
-#   clean                                   Clean build directory
+#    --level=major|minor|patch|prerelease   Version level to increment
+#   clean                                   Clean build 
+#    --target=full|lite|test                Files to use
 #   help                                    Display this help text
-#   lint                                    Lint JS source files
+#   lint                                    Lint JS source files 
+#    --target=full|lite|test                Files to use
 #   version                                 Print the library version
 ```
 
-To build a development version (logging not disabled, sourcemaps file) of JS lib:
+To build a new version (both full and lite) of the JavaScript library:
 
 ```
-$ gulp build --env dev
+$ npm run release
 ```
 
-Or, also:
+Differences from other forks/wrappers
+-------------------------------------
 
-```
-$ npm run development
-```
+* Built-in integration with Google Closure (compiler and library)
+* Automated fetch (via bower) of last version of Google's libphonenumber library
+* Automated build system, so simple and automated upgrades
 
-Rather to build a production ready code:
+Known issues
+------------
 
-```
-$ npm run production
-````
+* Target `test` needs to be fixed
 
 ---
 
-[![Analytics](https://ga-beacon.appspot.com/UA-49657176-1/ng-date-elements)](https://github.com/igrigorik/ga-beacon)
+[![Analytics](https://ga-beacon.appspot.com/UA-49657176-1/i18n.phonenumbers.js)](https://github.com/igrigorik/ga-beacon)
