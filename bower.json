@@ -1,0 +1,26 @@
+{
+  "name": "libphonenumber.js",
+  "description": "",
+  "version": "0.0.1",
+  "authors": [
+    "Leo Di Donato <leodidonato@gmail.com> (http://git.io/leodido)"
+  ],
+  "main": "libphonenumber.min.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "bower.json",
+    "package.json",
+    "lib"
+  ],
+  "devDependencies": {
+    "closure-library": "google/closure-library",
+    "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.tar.gz",
+    "libphonenumber": "git@github.com:googlei18n/libphonenumber.git#libphonenumber-7.0.3"
+  },
+  "keywords": [
+  ]
+}
