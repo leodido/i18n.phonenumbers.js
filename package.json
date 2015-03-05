@@ -8,12 +8,12 @@
     "email": "leodidonato@gmail.com",
     "url": "http://git.io/leodido"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "http://github.com/leodido/libphonenumber.js.git"
+    "url": "http://github.com/leodido/i18n.phonenumbers.js.git"
   },
-  "homepage": "http://github.com/leodido/libphonenumber.js",
+  "homepage": "http://github.com/leodido/i18n.phonenumbers.js",
   "devDependencies": {
     "bower": "~1.3.12",
     "calcdeps": "^0.2.0",

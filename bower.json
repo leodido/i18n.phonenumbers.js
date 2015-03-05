@@ -6,7 +6,12 @@
     "Leo Di Donato <leodidonato@gmail.com> (http://git.io/leodido)"
   ],
   "main": "i18n.phonenumbers.min.js",
-  "license": "MIT",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/leodido/i18n.phonenumbers.js.git"
+  },
+  "homepage": "http://github.com/leodido/i18n.phonenumbers.js",
   "ignore": [
     "**/.*",
     "node_modules",
