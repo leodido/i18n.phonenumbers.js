@@ -7,7 +7,7 @@ I18n phone numbers
 
 This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version (actually 7.0.3) of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
-There are two available build:
+There are two available builds:
 
 1. with full metadata
 
@@ -28,7 +28,7 @@ Exported on `leodido.i18n.PhoneNumbers` object:
     
 * `formatNumber(phoneNumber, regionCode, format)`
 
-    Format a phone number for a region to a specific format (i.e., E164, international, national, or RFC3966).
+    Formats a phone number for a region to a specific format (i.e., E164, international, national, or RFC3966).
 
 * `formatOriginal(phoneNumber, regionCode)`
 
@@ -138,9 +138,11 @@ $ npm run release
 Differences from other forks/wrappers
 -------------------------------------
 
-* Built-in integration with Google Closure (compiler and library)
-* Automated fetch (via bower) of last version of Google's libphonenumber library
-* Automated build system, so simple and automated upgrades
+1. Built-in integration with Google Closure (compiler and library)
+
+2. Automated fetch (via bower) of last version of Google's libphonenumber library
+
+3. Automated build system, so simple and automated upgrades
 
 Known issues
 ------------
