@@ -5,18 +5,66 @@ I18n phone numbers
 
 [![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)]()
 
-This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version of Google's libphonenumber.
+This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version (actually 7.0.3) of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
-There are two available libraries:
+There are two available build:
 
 1. with full metadata
 
 2. with lite metadata (lacks example numbers)
 
-Usage
------
+Features
+--------
 
-*WIP*
+Exported on `leodido.i18n.PhoneNumbers` object:
+
+* `getNumberType(phoneNumber, regionCode)`
+
+    Retrieves the type of the given number (with region code). Distinguishes between more than 10 types of phone numbers (fixed line, mobile, VOIP, etc.).
+
+* `getRegionCodeForNumber(phoneNumber, regionCode)`
+
+    Retrieves the region where a phone number is from
+    
+* `formatNumber(phoneNumber, regionCode, format)`
+
+    Format a phone number for a region to a specific format (i.e., E164, international, national, or RFC3966).
+
+* `formatOriginal(phoneNumber, regionCode)`
+
+    Formats a phone number using the original phone number format that the number is parsed from.
+
+* `formatOutOfCountryCalling(phoneNumber, regionCode, regionCallingFrom)`
+
+    Formats a phone number for out-of-country dialing purposes.
+
+* `formatMobileDialing(phoneNumber, regionCode, regionCallingFrom)`
+
+    Returns a phone number formatted in such a way that it can be dialed from a mobile phone in a specific region.
+
+* `getExampleNumber(regionCode, type, format)`
+
+    Retrieves an example phone number of the given type (fixed line, mobile, etc.) for the specified region and formats it into the provided format (or fallbacks to E164 format).
+
+* `isValidNumber(phoneNumber, regionCode)`
+
+    Full validates a phone number for a region using length and prefix information.
+
+* `isPossibleNumber(phoneNumber, regionCode)`
+
+    Quickly guesses whether a phone number is possible by using only the length information (faster then full validation).
+
+* `isPossibleNumberWithReason(phoneNumber, regionCode)`
+
+    As above but gives us additional info about the provided phone number.
+
+The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Google's `i18n.phonenumbers.AsYouTypeFormatter`. It can be used to format phone numbers on-the-fly when users enter each digit, with this functions:
+
+* `inputDigit(nextChar)`
+
+* `inputDigitAndRememberPosition(nextChar)`
+
+* `getRememberedPosition()`
 
 Install
 -------

@@ -58,7 +58,7 @@ function getRegionCodeForNumber(phoneNumber, regionCode) {
 
 
 /**
- * Format a phone number to the given type
+ * Format a phone number
  *
  * @param {string} phoneNumber
  * @param {?string} regionCode
@@ -136,6 +136,8 @@ function formatMobileDialing(phoneNumber, regionCode, regionCallingFrom) {
 /**
  * Get an example phone number for the given region code
  *
+ * Default format, used when format not specified, is E164 format.
+ *
  * @param {string} regionCode
  * @param {i18n.phonenumbers.PhoneNumberType} type
  * @param {?i18n.phonenumbers.PhoneNumberFormat} format
@@ -199,20 +201,6 @@ function isPossibleNumberWithReason(phoneNumber, regionCode) {
   return phoneNumberUtil.isPossibleNumberWithReason(number);
 }
 
-
-/**
- * Check whether a phone number is valid for a certain region.
- *
- * @param {string} phoneNumber
- * @param {?string} regionCode
- * @return {boolean}
- */
-function isValidNumberForRegion(phoneNumber, regionCode) {
-  regionCode = regionCode || 'us';
-  var number = phoneNumberUtil.parseAndKeepRawInput(phoneNumber, regionCode);
-  return phoneNumberUtil.isValidNumberForRegion(number, regionCode);
-}
-
 goog.exportSymbol('leodido.i18n.PhoneNumbers', PhoneNumbers);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.getNumberType', getNumberType);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.getRegionCodeForNumber', getRegionCodeForNumber);
@@ -224,4 +212,3 @@ goog.exportSymbol('leodido.i18n.PhoneNumbers.getExampleNumber', getExampleNumber
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isValidNumber', isValidNumber);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isPossibleNumber', isPossibleNumber);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isPossibleNumberWithReason', isPossibleNumberWithReason);
-goog.exportSymbol('leodido.i18n.PhoneNumbers.isValidNumberForRegion', isValidNumberForRegion);

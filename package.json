@@ -1,6 +1,6 @@
 {
   "name": "i18n-phonenumbers",
-  "version": "0.0.0",
+  "version": "0.703.0",
   "description": "Parse, format, and validate international phone numbers through Google's libphonenumber",
   "main": "i18n.phonenumbers.min.js",
   "author": {
