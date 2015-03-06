@@ -3,7 +3,7 @@ I18n phone numbers
 
 **Parse, format, and validate international phone numbers through Google's libphonenumber**.
 
-[![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)]() [![License](https://img.shields.io/badge/license-Apache--2.0-yellowgreen.svg)](http://opensource.org/licenses/Apache-2.0)
+[![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-Apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
 
 This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version (actually 7.0.3) of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
