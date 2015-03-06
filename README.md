@@ -1,4 +1,4 @@
-I18n phone numbers
+i18n phone numbers
 ==================
 
 **Parse, format, and validate international phone numbers through Google's libphonenumber**.
