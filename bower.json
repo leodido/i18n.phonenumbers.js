@@ -22,6 +22,7 @@
     "gulpfile.js",
     "bower.json",
     "package.json",
+    "gjslint.conf"
     "src"
   ],
   "devDependencies": {
