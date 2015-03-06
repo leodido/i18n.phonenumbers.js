@@ -19,7 +19,7 @@
     "gulpfile.js",
     "bower.json",
     "package.json",
-    "lib"
+    "src"
   ],
   "devDependencies": {
     "closure-library": "google/closure-library",
