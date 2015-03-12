@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <script src="bower_components/closure-library/closure/goog/base.js"></script>
+    <script src="bower_components/libphonenumber/javascript/i18n/phonenumbers/metadata.js"></script>
+    <script src="src/filter/metadata.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .string { color: green; }
+      .number { color: darkorange; }
+      .boolean { color: blue; }
+      .null { color: magenta; }
+      .key { color: red; }
+    </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <div id="input" class="col-xs-6">
+        <strong>For which countries do you want to obtain metadata?</strong>
+        <form id="countries"></form>
+      </div>
+      <div id="result" class="col-xs-6"></div>
+    </div>
+    <hr/>
+  </div>
+
+  <script type="text/javascript">
+    function uniq(value, index, self) {
+      return self.indexOf(value) === index;
+    }
+    // Get all country codes from metadata
+    var allCountries1 = Object.keys(i18n.phonenumbers.metadata.countryToMetadata).filter(function(c) {
+      if (~~c === 0) return c;
+    });
+    allCountries1.push('001');
+    // Get all country codes from map
+    var allCountries2 = [];
+    for (var countryCallingCode in i18n.phonenumbers.metadata.countryCodeToRegionCodeMap) {
+      if (i18n.phonenumbers.metadata.countryCodeToRegionCodeMap.hasOwnProperty(countryCallingCode)) {
+        Array.prototype.push.apply(allCountries2, i18n.phonenumbers.metadata.countryCodeToRegionCodeMap[countryCallingCode]);
+      }
+    }
+    allCountries2 = allCountries2.filter(uniq).sort();
+    //
+    if (allCountries1.length !== allCountries2.length) {
+      throw new Error('Something is wrong. Stop.');
+    }
+    // Build form
+    var row,
+        cont = document.getElementById('countries'),
+        btn = document.createElement('BUTTON'),
+        splitEvery = 7,
+        checkboxes = [],
+        resultDiv = document.getElementById('result');
+
+    for (var x = 0; x < allCountries2.length; x++) {
+      // Create label
+      var l = document.createElement('LABEL');
+      l.setAttribute('class', 'checkbox-inline');
+      // Create checkbox
+      var i = document.createElement('INPUT');
+      i.setAttribute('type', 'checkbox');
+      i.setAttribute('value', allCountries2[x]);
+      checkboxes.push(i);
+      // Append checkbox to label
+      l.appendChild(i);
+      l.appendChild(document.createTextNode(allCountries2[x].toLowerCase()));
+      // Create div
+      var d = document.createElement('DIV');
+      d.setAttribute('class', 'col-xs-' + ~~(12 / splitEvery));
+      d.appendChild(l);
+      // Append to page
+      if (x % splitEvery === 0) {
+        row = document.createElement('DIV');
+        row.setAttribute('class', 'row');
+        cont.appendChild(row);
+      }
+      row.appendChild(d);
+    }
+    btn.setAttribute('type', 'button');
+    btn.setAttribute('class', 'btn btn-primary');
+    btn.setAttribute('onclick', 'build()');
+    btn.appendChild(document.createTextNode('Build'));
+    cont.appendChild(btn);
+
+    var build = function() {
+      var selections = [];
+      for (var k = 0; k < checkboxes.length; k++) {
+        var el = checkboxes[k];
+        if (el.checked) {
+          selections.push(el.value);
+        }
+      }
+      if (selections.length > 0) {
+        var fm = new leodido.i18n.MetadataFilter(selections);
+        output(syntaxHighlight(JSON.stringify(fm, null, 4)));
+      }
+    };
+
+    function output(str) {
+      // Clear
+      while (resultDiv.firstChild) {
+        resultDiv.removeChild(resultDiv.firstChild);
+      }
+      // Show
+      resultDiv.appendChild(document.createElement('pre')).innerHTML = str;
+    }
+
+    function syntaxHighlight(json) {
+      json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+          if (/:$/.test(match)) {
+            cls = 'key';
+          } else {
+            cls = 'string';
+          }
+        } else if (/true|false/.test(match)) {
+          cls = 'boolean';
+        } else if (/null/.test(match)) {
+          cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+      });
+    }
+  </script>
+</body>
+</html>
