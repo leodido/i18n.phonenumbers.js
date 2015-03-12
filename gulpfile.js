@@ -218,10 +218,14 @@ gulp.task('version', 'Print the library version', [], function() {
   return gutil.log('Library', gutil.colors.magenta(bundle.name) + ',', gutil.colors.magenta(bundle.version));
 });
 
-gulp.task('bump', 'Bump version up for a new release', function() {
+gulp.task('bump', 'Bump version up for a new release', [], function() {
   return gulp.src(['./bower.json', 'package.json'])
       .pipe(bump({ type: getLevel() }))
       .pipe(gulp.dest('./'));
 }, levelsHelp);
 
 // TODO: sourcemap
+
+gulp.task('localize', false, [], function() {
+
+});
