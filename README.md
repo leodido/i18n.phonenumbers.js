@@ -142,12 +142,24 @@ Differences from other forks/wrappers
 
 2. Automated fetch (via bower) of last version of Google's libphonenumber library
 
-3. Automated build system, so simple and automated upgrades
+3. Automated build system
+
+4. Buils system support various build types (e.g., with full metadata, with lite metadata, with specific metadata by country)
+
+5. Ease of maintain, so simple and quick to update
 
 Known issues
 ------------
 
 * Target `test` needs to be fixed
+
+* Missing country codes:
+
+    * **XK** (Kosovo) -> should be added to targets: `release-eu-extended`, `release-cefta`
+    
+    * **IC** (Canary Islands) -> should be added to targets: `release-eu-extended`
+    
+    * **EA** (Ceuta and Melilla) -> should be added to targets: `release-eu-extended`
 
 ---
 

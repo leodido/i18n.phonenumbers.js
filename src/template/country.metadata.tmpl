@@ -1,0 +1,13 @@
+<%
+%output%
+var meta = new leodido.i18n.MetadataFilter(countries);
+%>
+goog.provide('<%= namespace %>');
+
+
+<%= mapJsdoc %>
+<%= namespace %>.countryCodeToRegionCodeMap = <% print(JSON.stringify(meta.map, null, 2)); %>;
+
+
+<%= dataJsdoc %>
+<%= namespace %>.countryToMetadata = <% print(JSON.stringify(meta.data, null, 2)); %>;
