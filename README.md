@@ -21,7 +21,7 @@ However, **other versions (smaller) of the library can be built restricting coun
 
 * etc. etc.
 
-See [package.json](#package.json) for other available shortcut build scripts.
+See [package.json](./package.json) for other available shortcut build scripts.
 
 Generally **you can build any version of the library** using the `gulp countrybuild` command (see [below](#build)).
 
@@ -29,7 +29,7 @@ This feature is very useful when your application needs **only the phone numbers
 
 Do you want to format and validate only italian phone numbers?
 
-Simple, [clone and install](#update) the repository and then run `gulp countrybuild --country=it`:  you'll get a file 10 times smaller than normal. :grin:
+Simple, [clone and install](#update) the repository and then run `gulp countrybuild --country=it`. You'll get a file 10 times smaller than normal.
 
 Differences from other forks/wrappers
 -------------------------------------
@@ -100,7 +100,7 @@ The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Googl
 
 #### Note
 
-In the `demo/` directory you can find example/s.
+In the `demo` directory you can find example/s.
 
 Install
 -------

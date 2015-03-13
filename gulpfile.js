@@ -206,7 +206,7 @@ gulp.task('deps', false, ['lint'], function(done) {
 
 gulp.task('compile', false, ['deps'], function() {
   var target = getTarget(),
-      wrapper = '(function(){%output%})();',
+      wrapper = '(function(){%output%}).call(window);', //'(function(){%output%})();',
       level = 'VERBOSE',
       errors = ['accessControls', 'ambiguousFunctionDecl', 'checkDebuggerStatement', 'checkRegExp',
         'checkTypes', 'checkVars', 'const', 'constantProperty', 'deprecated', 'duplicate', 'duplicateMessage',
