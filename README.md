@@ -9,23 +9,23 @@ This repository provides an already compiled JavaScript library aimed to parse, 
 
 There are two main files:
 
-1. library built with full metadata (i.e. `i18n.phonenumbers.min.js`)
+1. library with **full metadata** (i.e. `i18n.phonenumbers.min.js`)
 
-2. library built with lite metadata, that lacks example numbers (i.e. `lite.i18n.phonenumbers.min.js`)
+2. library with **lite metadata**, that lacks example phone numbers (i.e. `lite.i18n.phonenumbers.min.js`)
 
-However, other versions (smaller, of course) of the library can be built restricting countries metadata. E.g.,
+However, **other versions (smaller) of the library can be built restricting countries metadata**. E.g.,
 
-* library containing only europe (extended) metadata (i.e. `eu.extended.i18n.phonenumbers.min.js`)
+* library containing only europe (extended) metadata
 
 * library containing only eurozone metadata
 
 * etc. etc.
 
-See `package.json` for other available shortcut build scripts.
+See [package.json](#package.json) for other available shortcut build scripts.
 
-Generally you can build any version of the library using the `gulp countrybuild` command (see [below](#build)).
+Generally **you can build any version of the library** using the `gulp countrybuild` command (see [below](#build)).
 
-This is feature is very useful when your application needs only the phone numbers of a specific country set and you want to save space.
+This feature is very useful when your application needs **only the phone numbers of a specific country set** and you want to **save space**.
 
 Do you want to format and validate only italian phone numbers?
 
@@ -40,7 +40,7 @@ Differences from other forks/wrappers
 
 3. Automated build system
 
-4. Build system supports various build types (e.g., with full metadata, with lite metadata, with specific metadata by country)
+4. Build system supports various build types (e.g., with full metadata, with specific metadata)
 
 5. Easy to maintain, simple to upgrade
 
