@@ -40,5 +40,3 @@ var errors = {
    */
   TOO_LONG: i18n.phonenumbers.Error.TOO_LONG
 };
-
-goog.exportSymbol('leodido.i18n.PhoneNumbers.ERROR', errors);

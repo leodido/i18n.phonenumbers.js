@@ -2,11 +2,14 @@
 
 goog.provide('leodido.i18n.PhoneNumbers');
 
-goog.require('i18n.phonenumbers.PhoneNumberFormat');
-goog.require('i18n.phonenumbers.PhoneNumberType');
 goog.require('i18n.phonenumbers.PhoneNumberUtil');
-goog.require('i18n.phonenumbers.PhoneNumberUtil.ValidationResult');
+goog.require('leodido.i18n.PhoneNumbers.ERROR');
+goog.require('i18n.phonenumbers.PhoneNumberFormat');
+goog.require('leodido.i18n.PhoneNumbers.FORMAT');
+goog.require('i18n.phonenumbers.PhoneNumberType');
 goog.require('leodido.i18n.PhoneNumbers.TYPE');
+goog.require('i18n.phonenumbers.PhoneNumberUtil.ValidationResult');
+goog.require('leodido.i18n.PhoneNumbers.RESULT');
 
 var phoneNumberUtil = i18n.phonenumbers.PhoneNumberUtil.getInstance();
 
@@ -212,3 +215,7 @@ goog.exportSymbol('leodido.i18n.PhoneNumbers.getExampleNumber', getExampleNumber
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isValidNumber', isValidNumber);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isPossibleNumber', isPossibleNumber);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isPossibleNumberWithReason', isPossibleNumberWithReason);
+goog.exportSymbol('leodido.i18n.PhoneNumbers.RESULT', results);
+goog.exportSymbol('leodido.i18n.PhoneNumbers.TYPE', types);
+goog.exportSymbol('leodido.i18n.PhoneNumbers.ERROR', errors);
+goog.exportSymbol('leodido.i18n.PhoneNumbers.FORMAT', formats);

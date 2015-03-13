@@ -27,5 +27,3 @@ var results = {
    */
   TOO_LONG: i18n.phonenumbers.PhoneNumberUtil.ValidationResult.TOO_LONG
 };
-
-goog.exportSymbol('leodido.i18n.PhoneNumbers.RESULT', results);

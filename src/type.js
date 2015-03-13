@@ -72,5 +72,3 @@ var types = {
    */
   UNKNOWN: i18n.phonenumbers.PhoneNumberType.UNKNOWN
 };
-
-goog.exportSymbol('leodido.i18n.PhoneNumbers.TYPE', types);

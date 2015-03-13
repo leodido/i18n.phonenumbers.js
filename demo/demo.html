@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<head>
+  <title>Phone number parser demo</title>
+  <script src="../i18n.phonenumbers.min.js"></script>
+</head>
+<html>
+  <body>
+
+  <h2>Phone number parser demo</h2>
+
+  <form>
+    <p>
+      <label>Specify a phone number
+        <br/><input type="text" name="phoneNumber" id="phoneNumber" size="25" />
+      </label>
+    </p>
+    <p>
+      <label>Specify a default country (ISO 3166-1 two-letter country code)
+        <br/><input type="text" name="defaultCountry" id="defaultCountry" size="2" />
+      </label>
+    </p>
+    <p>
+      <label>Specify a carrier code (optional, only valid for some countries)
+        <br/><input type="text" name="carrierCode" id="carrierCode" size="2" />
+      </label>
+    </p>
+    <input type="button" value="Submit" onclick="return parser();" />
+    <input type="reset" value="Reset" />
+    <p>
+      <label>Results
+        <br/><textarea id="output" rows="30" cols="80"></textarea>
+      </label>
+    </p>
+  </form>
+
+  <script type="text/javascript">
+    var textArea = document.getElementById('output'),
+        phoneNumber = document.getElementById('phoneNumber'),
+        defaultCountry = document.getElementById('defaultCountry'),
+        carrierCode = document.getElementById('carrierCode'),
+        getInputValues = function() {
+          return {
+            number: phoneNumber.value || null,
+            country: defaultCountry.value || null,
+            carrier: carrierCode.value || null
+          };
+        },
+        output = '';
+    //
+    function parser() {
+      var inValues = getInputValues(),
+          number = inValues.number,
+          country = inValues.country,
+          carrier = inValues.carrier;
+
+      try {
+        var isPossible = leodido.i18n.PhoneNumbers.isPossibleNumber(number);
+        if (!isPossible) {
+
+        }
+      } catch (exc) {
+        output += '\nException: ' + exc;
+      }
+      textArea.value = output;
+      return false;
+    }
+  </script>
+
+  </body>
+</html>

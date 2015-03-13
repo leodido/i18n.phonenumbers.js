@@ -27,5 +27,3 @@ var formats = {
    */
   RFC3966: i18n.phonenumbers.PhoneNumberFormat.RFC3966
 };
-
-goog.exportSymbol('leodido.i18n.PhoneNumbers.FORMAT', formats);
