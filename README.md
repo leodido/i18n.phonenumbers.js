@@ -5,15 +5,46 @@ i18n phone numbers
 
 [![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-Apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
 
-This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version (actually 7.0.3) of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
+This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
-There are two available builds:
+There are two main files:
 
-1. with full metadata
+1. library built with full metadata (i.e. `i18n.phonenumbers.min.js`)
 
-2. with lite metadata (lacks example numbers)
+2. library built with lite metadata, that lacks example numbers (i.e. `lite.i18n.phonenumbers.min.js`)
 
-Features
+However, other versions (smaller, of course) of the library can be built restricting countries metadata. E.g.,
+
+* library containing only europe (extended) metadata (i.e. `eu.extended.i18n.phonenumbers.min.js`)
+
+* library containing only eurozone metadata
+
+* etc. etc.
+
+See `package.json` for other available shortcut build scripts.
+
+Generally you can build any version of the library using the `gulp countrybuild` command (see [below](#build)).
+
+This is feature is very useful when your application needs only the phone numbers of a specific country set and you want to save space.
+
+Do you want to format and validate only italian phone numbers?
+
+Simple, [clone and install](#update) the repository and then run `gulp countrybuild --country=it`:  you'll get a file 10 times smaller than normal. :grin:
+
+Differences from other forks/wrappers
+-------------------------------------
+
+1. Built-in integration with Google Closure (compiler and library)
+
+2. Automated fetch (via bower) of last version of Google's libphonenumber library
+
+3. Automated build system
+
+4. Build system supports various build types (e.g., with full metadata, with lite metadata, with specific metadata by country)
+
+5. Easy to maintain, simple to upgrade
+
+Overview
 --------
 
 Exported on `leodido.i18n.PhoneNumbers` object:
@@ -66,6 +97,11 @@ The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Googl
 
 * `getRememberedPosition()`
 
+
+#### Note
+
+In the `demo/` directory you can find example/s.
+
 Install
 -------
 
@@ -75,7 +111,7 @@ Install it via `bower`.
 bower install i18n-phonenumbers
 ```
 
-Otherwise you can simply grab `i18n.phonenumbers.min.js` file/s in the repository root.
+Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s in the repository root.
 
 Update
 ------
@@ -102,7 +138,8 @@ Or simply **DIY**.
 3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**.
 
     ```
-    $ npm run release
+    $ make patch
+    $ make release
     ```
 
 Build
@@ -118,35 +155,31 @@ Need help? Run `gulp help` !
 # 
 # Available tasks
 #   build                                   Build the library from source files 
-#    --target=full|lite|test                Files to use
+#    --target=full|lite|bycountry|test      Files to use
 #   bump                                    Bump version up for a new release 
 #    --level=major|minor|patch|prerelease   Version level to increment
 #   clean                                   Clean build 
-#    --target=full|lite|test                Files to use
+#    --target=full|lite|bycountry|test      Files to use
+#  countrybuild                             Build a library that supports only specified countries 
+#    --country=it,es,fr,de,..               Comma separated list of ISO 3166-1 alpha-2 country codes 
+#    --prefix=...                           If specifiec the output file name will be <prefix>.i18n.phonenumbers.min.
 #   help                                    Display this help text
 #   lint                                    Lint JS source files 
-#    --target=full|lite|test                Files to use
+#    --target=full|lite|bycountry|test      Files to use
 #   version                                 Print the library version
 ```
 
 To build a new version (both full and lite) of the JavaScript library:
 
 ```
-$ npm run release
+# npm run release
 ```
 
-Differences from other forks/wrappers
--------------------------------------
+Or
 
-1. Built-in integration with Google Closure (compiler and library)
-
-2. Automated fetch (via bower) of last version of Google's libphonenumber library
-
-3. Automated build system
-
-4. Buils system support various build types (e.g., with full metadata, with lite metadata, with specific metadata by country)
-
-5. Ease of maintain, so simple and quick to update
+```
+# make release
+```
 
 Known issues
 ------------
