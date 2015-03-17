@@ -1,7 +1,7 @@
 {
   "name": "i18n-phonenumbers",
-  "description": "Parse, format, and validate international phone numbers through Google's libphonenumber",
   "version": "0.703.2",
+  "description": "Parse, format, and validate international phone numbers through Google's libphonenumber",
   "authors": [
     "Leo Di Donato <leodidonato@gmail.com> (http://git.io/leodido)"
   ],
@@ -23,7 +23,7 @@
     "gulpfile.js",
     "bower.json",
     "package.json",
-    "gjslint.conf"
+    "gjslint.conf",
     "src"
   ],
   "devDependencies": {

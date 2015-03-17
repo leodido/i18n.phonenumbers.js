@@ -204,6 +204,16 @@ function isPossibleNumberWithReason(phoneNumber, regionCode) {
   return phoneNumberUtil.isPossibleNumberWithReason(number);
 }
 
+
+/**
+ * Convenience method to get a list of what regions the library has metadata for.
+ * @return {!Array.<string>} region codes supported by the library.
+ */
+function getSupportedRegions() {
+  return phoneNumberUtil.getSupportedRegions();
+}
+
+
 goog.exportSymbol('leodido.i18n.PhoneNumbers', PhoneNumbers);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.getNumberType', getNumberType);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.getRegionCodeForNumber', getRegionCodeForNumber);
@@ -215,7 +225,10 @@ goog.exportSymbol('leodido.i18n.PhoneNumbers.getExampleNumber', getExampleNumber
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isValidNumber', isValidNumber);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isPossibleNumber', isPossibleNumber);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.isPossibleNumberWithReason', isPossibleNumberWithReason);
+goog.exportSymbol('leodido.i18n.PhoneNumbers.getSupportedRegions', getSupportedRegions);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.RESULT', results);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.TYPE', types);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.ERROR', errors);
 goog.exportSymbol('leodido.i18n.PhoneNumbers.FORMAT', formats);
+
+// TODO: do a function that guess country/regioncode

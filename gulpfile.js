@@ -276,7 +276,7 @@ gulp.task('version', 'Print the library version', [], function() {
 });
 
 gulp.task('bump', 'Bump version up for a new release', [], function() {
-  return gulp.src(['./bower.json', 'package.json'])
+  return gulp.src(['./bower.json', './package.json'])
       .pipe(bump({ type: getLevel() }))
       .pipe(gulp.dest('./'));
 }, levelsHelp);

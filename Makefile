@@ -1,18 +1,5 @@
 .PHONY: minor major patch release all
 
-major:
-	gulp bump --level=major
-
-minor:
-	gulp bump --level=minor
-
-patch:
-	gulp bump --level=patch
-
-release:
-	npm run release
-	npm run release-eu-extended
-
 all: release
 	npm run release-eurozone19
 	npm run release-schengen26
@@ -28,3 +15,15 @@ all: release
 	npm run release-benelux
 	npm run release-eucouncil
 
+release:
+	npm run release
+	npm run release-eu-extended
+
+major:
+	gulp bump --level=major
+
+minor:
+	gulp bump --level=minor
+
+patch:
+	gulp bump --level=patch

@@ -28,12 +28,20 @@
     <input type="reset" value="Reset" />
     <p>
       <label>Results
-        <br/><textarea id="output" rows="30" cols="80"></textarea>
+        <br/><textarea id="output" rows="20" cols="100"></textarea>
       </label>
     </p>
   </form>
 
   <script type="text/javascript">
+    Object.prototype.getKeyByValue = function(value) {
+      for (var prop in this) {
+        if (this.hasOwnProperty(prop)) {
+          if (this[ prop ] === value)
+            return prop;
+        }
+      }
+    };
     var textArea = document.getElementById('output'),
         phoneNumber = document.getElementById('phoneNumber'),
         defaultCountry = document.getElementById('defaultCountry'),
@@ -45,23 +53,71 @@
             carrier: carrierCode.value || null
           };
         },
-        output = '';
+        output = '',
+        setOutput = function(output) {
+          textArea.value = output;
+        };
     //
     function parser() {
       var inValues = getInputValues(),
           number = inValues.number,
-          country = inValues.country,
-          carrier = inValues.carrier;
+          defaultRegionCode = inValues.country,
+          carrier = inValues.carrier,
+          isPossible = false,
+          regionCode = null,
+          isValid = false;
+      output = '';
+      setOutput(output);
 
       try {
-        var isPossible = leodido.i18n.PhoneNumbers.isPossibleNumber(number);
+        output += '\nValidation Results:';
+        isPossible = leodido.i18n.PhoneNumbers.isPossibleNumber(number); // FIXME: pass country?
+        output += '\n* isPossibleNumber(\'' + number + '\') -> ';
+        output += isPossible ? 'true' : 'false';
         if (!isPossible) {
-
+          // Number not possible
+          output += '\n* isPossibleNumberWithReason(\'' + number + '\') -> ';
+          var PNV = leodido.i18n.PhoneNumbers.RESULT,
+              PNE = leodido.i18n.PhoneNumbers.ERROR,
+              reason = leodido.i18n.PhoneNumbers.isPossibleNumberWithReason(number),
+              code = PNV.getKeyByValue(reason);
+          output += code;
+          if (typeof PNE[code] !== 'undefined') {
+            // PNV.INVALID_COUNTRY_CODE || PNV.TOO_LONG
+            output += '\nERR: ' + PNE[code];
+          } else {
+            // NOTE: validation RESULT has only TOO_SHORT code while ERROR has two type of TOO_SHORT errors
+            if (code.match(/TOO_SHORT/)) {
+              // PNV.TOO_SHORT
+              output += '\nERR: ' + PNE.TOO_SHORT_AFTER_IDD;
+              output += '\nERR: ' + PNE.TOO_SHORT_NSN;
+            } else {
+              // NOTE: should never happen that reason == PNV.IS_POSSIBLE
+              // PNV.IS_POSSIBLE || PNE.NOT_A NUMBER
+              if (reason === PNV.IS_POSSIBLE) {
+                output += '\nERR: something wrong, should never happen that number IS_POSSIBLE at this stage';
+              } else {
+                output += '\nERR: probably an unknown error (code: ' + code + ')';
+              }
+            }
+          }
         }
       } catch (exc) {
-        output += '\nException: ' + exc;
+        output += '\nEXC: ' + exc + ' [from isPossibleNumber()]';
       }
-      textArea.value = output;
+
+      if (isPossible) {
+        try {
+          //  Number possible, check if it is valid
+          isValid = leodido.i18n.PhoneNumbers.isValidNumber(number, defaultRegionCode);
+          console.log(isValid, defaultRegionCode, leodido.i18n.PhoneNumbers.getRegionCodeForNumber(number));
+        } catch (exc) {
+          output += '\nEXC: ' + exc + ' [from isValidNumber()]';
+        }
+      }
+
+
+      setOutput(output);
       return false;
     }
   </script>
