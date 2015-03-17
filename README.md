@@ -65,11 +65,11 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 
     Formats a phone number using the original phone number format that the number is parsed from.
 
-* `formatOutOfCountryCalling(phoneNumber, regionCode, regionCallingFrom)`
+* `formatOutOfCountryCalling(regionCallingFrom, phoneNumber, regionCode)`
 
     Formats a phone number for out-of-country dialing purposes.
 
-* `formatMobileDialing(phoneNumber, regionCode, regionCallingFrom)`
+* `formatMobileDialing(regionCallingFrom, phoneNumber, regionCode)`
 
     Returns a phone number formatted in such a way that it can be dialed from a mobile phone in a specific region.
 
@@ -80,6 +80,10 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 * `isValidNumber(phoneNumber, regionCode)`
 
     Full validates a phone number for a region using length and prefix information.
+    
+* `isValidNumberForRegion(phoneNumber, regionCode)`
+
+    Full verifies whether a phone number is valid for a certain region or not.
 
 * `isPossibleNumber(phoneNumber, regionCode)`
 
@@ -88,6 +92,9 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 * `isPossibleNumberWithReason(phoneNumber, regionCode)`
 
     As above but gives us additional info about the provided phone number.
+    
+    
+
 
 The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Google's `i18n.phonenumbers.AsYouTypeFormatter`. It can be used to format phone numbers on-the-fly when users enter each digit, with this functions:
 
@@ -98,9 +105,9 @@ The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Googl
 * `getRememberedPosition()`
 
 
-#### Note
+#### Notes
 
-In the `demo` directory you can find example/s.
+- Unless otherwise specified the `regionCode` always defaults to 'US'.
 
 Install
 -------
