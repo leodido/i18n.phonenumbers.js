@@ -72,6 +72,14 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 * `formatMobileDialing(regionCallingFrom, phoneNumber, regionCode)`
 
     Returns a phone number formatted in such a way that it can be dialed from a mobile phone in a specific region.
+    
+* `formatNationalWithCarrierCode(carrierCode, phoneNumber, regionCode)`
+
+    Formats a phone number in national format for dialing using the carrier.
+
+* `formatNationalWithPreferredCarrierCode(fallbackCarrierCode, phoneNumber, regionCode)`
+
+    Formats a phone number in national format for dialing using the preferred domestic carrier code (or a fallback carrier code if the preferred is missing).
 
 * `getExampleNumber(regionCode, type, format)`
 
