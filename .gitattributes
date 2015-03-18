@@ -1,2 +1,2 @@
 *.conf linguist-documentation
-demo/ linguist-documentation
+demo/* linguist-documentation
