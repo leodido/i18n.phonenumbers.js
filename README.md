@@ -1,19 +1,65 @@
-I18n phone numbers
+i18n phone numbers
 ==================
 
 **Parse, format, and validate international phone numbers through Google's libphonenumber**.
 
-[![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-Apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
+[![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
 
-This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version (actually 7.0.3) of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
+This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
-There are two available builds:
+There are two main files:
 
-1. with full metadata
+1. library with **full metadata** (i.e. `i18n.phonenumbers.min.js`)
 
-2. with lite metadata (lacks example numbers)
+2. library with **lite metadata**, that lacks example phone numbers (i.e. `lite.i18n...`)
 
-Features
+However, **other versions (smaller) of the library can be built restricting countries metadata**. E.g.,
+
+* library containing only europe (extended) metadata
+
+* library containing only eurozone metadata
+
+* etc. etc.
+
+See [package.json](./package.json) for other available shortcut build scripts.
+
+Generally **you can build any version of the library** using the `gulp countrybuild` command (see [below](#build)).
+
+This feature is very useful when your application needs **only the phone numbers of a specific country set** and you want to **save space**.
+
+Do you want to format and validate only italian phone numbers?
+
+Simple, [clone and install](#update) the repository and then run `gulp countrybuild --country=it`. You'll get a file 10 times smaller than normal.
+
+Differences from other forks/wrappers
+-------------------------------------
+
+1. Built-in integration with Google Closure (compiler and library)
+
+2. Automated fetch (via bower) of last version of Google's libphonenumber library
+
+3. Automated build system
+
+4. Support for various build types (e.g., with full metadata, with country's specific metadata)
+
+5. Easy to maintain, simple to upgrade
+
+Install
+-------
+
+Install it via `bower`.
+
+```
+bower install i18n-phonenumbers
+```
+
+Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s in the repository root or use [rawgit](https://rawgit.com).
+
+```html
+<script src="https://cdn.rawgit.com/leodido/i18n.phonenumbers.js/master/i18n.phonenumbers.min.js"></script>
+```
+
+Overview
 --------
 
 Exported on `leodido.i18n.PhoneNumbers` object:
@@ -34,13 +80,21 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 
     Formats a phone number using the original phone number format that the number is parsed from.
 
-* `formatOutOfCountryCalling(phoneNumber, regionCode, regionCallingFrom)`
+* `formatOutOfCountryCalling(regionCallingFrom, phoneNumber, regionCode)`
 
     Formats a phone number for out-of-country dialing purposes.
 
-* `formatMobileDialing(phoneNumber, regionCode, regionCallingFrom)`
+* `formatMobileDialing(regionCallingFrom, phoneNumber, regionCode)`
 
     Returns a phone number formatted in such a way that it can be dialed from a mobile phone in a specific region.
+    
+* `formatNationalWithCarrierCode(carrierCode, phoneNumber, regionCode)`
+
+    Formats a phone number in national format for dialing using the carrier.
+
+* `formatNationalWithPreferredCarrierCode(fallbackCarrierCode, phoneNumber, regionCode)`
+
+    Formats a phone number in national format for dialing using the preferred domestic carrier code (or a fallback carrier code if the preferred is missing).
 
 * `getExampleNumber(regionCode, type, format)`
 
@@ -49,6 +103,10 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 * `isValidNumber(phoneNumber, regionCode)`
 
     Full validates a phone number for a region using length and prefix information.
+    
+* `isValidNumberForRegion(phoneNumber, regionCode)`
+
+    Full verifies whether a phone number is valid for a certain region or not.
 
 * `isPossibleNumber(phoneNumber, regionCode)`
 
@@ -66,16 +124,15 @@ The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Googl
 
 * `getRememberedPosition()`
 
-Install
--------
 
-Install it via `bower`.
+#### Notes
 
-```
-bower install i18n-phonenumbers
-```
+- Unless otherwise specified the `regionCode` always defaults to 'US'.
 
-Otherwise you can simply grab `i18n.phonenumbers.min.js` file/s in the repository root.
+
+#### Examples
+
+In the `demo` directory you can find examples covering phone number validation, formatting (as you type or one shot) and generation.
 
 Update
 ------
@@ -102,7 +159,8 @@ Or simply **DIY**.
 3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**.
 
     ```
-    $ npm run release
+    $ make patch
+    $ make release
     ```
 
 Build
@@ -118,36 +176,44 @@ Need help? Run `gulp help` !
 # 
 # Available tasks
 #   build                                   Build the library from source files 
-#    --target=full|lite|test                Files to use
+#    --target=full|lite|bycountry|test      Files to use
 #   bump                                    Bump version up for a new release 
 #    --level=major|minor|patch|prerelease   Version level to increment
 #   clean                                   Clean build 
-#    --target=full|lite|test                Files to use
+#    --target=full|lite|bycountry|test      Files to use
+#  countrybuild                             Build a library that supports only specified countries 
+#    --country=it,es,fr,de,..               Comma separated list of ISO 3166-1 alpha-2 country codes 
+#    --prefix=...                           If specifiec the output file name will be <prefix>.i18n.phonenumbers.min.
 #   help                                    Display this help text
 #   lint                                    Lint JS source files 
-#    --target=full|lite|test                Files to use
+#    --target=full|lite|bycountry|test      Files to use
 #   version                                 Print the library version
 ```
 
 To build a new version (both full and lite) of the JavaScript library:
 
 ```
-$ npm run release
+# npm run release
 ```
 
-Differences from other forks/wrappers
--------------------------------------
+Or
 
-1. Built-in integration with Google Closure (compiler and library)
-
-2. Automated fetch (via bower) of last version of Google's libphonenumber library
-
-3. Automated build system, so simple and automated upgrades
+```
+# make release
+```
 
 Known issues
 ------------
 
 * Target `test` needs to be fixed
+
+* Missing country codes:
+
+    * **XK** (Kosovo) -> should be added to targets: `release-eu-extended`, `release-cefta`
+    
+    * **IC** (Canary Islands) -> should be added to targets: `release-eu-extended`
+    
+    * **EA** (Ceuta and Melilla) -> should be added to targets: `release-eu-extended`
 
 ---
 

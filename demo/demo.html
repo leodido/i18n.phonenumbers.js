@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<head>
+  <title>Phone number parser demo</title>
+  <script src="../i18n.phonenumbers.min.js"></script>
+</head>
+<html>
+  <body>
+
+  <h2>Phone number parser demo</h2>
+
+  <form>
+    <p>
+      <label>Specify a phone number
+        <br/><input type="text" name="phoneNumber" id="phoneNumber" size="25" />
+      </label>
+    </p>
+    <p>
+      <label>Specify a default country (ISO 3166-1 two-letter country code)
+        <br/><select name="defaultCountry" id="defaultCountry"></select>
+      </label>
+    </p>
+    <p>
+      <label>Specify a carrier code (optional, only valid for some countries)
+        <br/><input type="text" name="carrierCode" id="carrierCode" size="2" />
+      </label>
+    </p>
+    <input type="button" value="Submit" onclick="return parser();" />
+    <input type="reset" value="Reset" />
+
+    <hr/>
+    <strong>Output</strong>
+    <br/>
+    <pre id="output"></pre>
+
+  </form>
+
+  <script type="text/javascript">
+    Object.prototype.getKeyByValue = function(value) {
+      for (var prop in this) {
+        if (this.hasOwnProperty(prop)) {
+          if (this[ prop ] === value)
+            return prop;
+        }
+      }
+    };
+    var getOrdinal = function(n) {
+      var s = ["th","st","nd","rd"],
+        v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    };
+    //
+    var outputArea = document.getElementById('output'),
+        phoneNumber = document.getElementById('phoneNumber'),
+        defaultCountry = document.getElementById('defaultCountry'),
+        carrierCode = document.getElementById('carrierCode'),
+        getInputValues = function() {
+          return {
+            number: phoneNumber.value || null,
+            country: defaultCountry.value || null,
+            carrier: carrierCode.value || null
+          };
+        },
+        output = '',
+        setOutput = function(output) {
+          while (outputArea.firstChild) {
+            outputArea.removeChild(outputArea.firstChild);
+          }
+          outputArea.appendChild(document.createTextNode(output));
+        };
+    function createCountrySelect() {
+      var allRegions = leodido.i18n.PhoneNumbers.getSupportedRegions();
+      var nullOption = document.createElement('OPTION');
+      nullOption.setAttribute('label', '');
+      nullOption.setAttribute('value', '');
+      defaultCountry.appendChild(nullOption);
+      for (var i = 1; i <= allRegions.length; i++) {
+        var value = allRegions[i - 1],
+            label = value.toLowerCase();
+        var optionEl = document.createElement('OPTION');
+        optionEl.setAttribute('label', label);
+        optionEl.setAttribute('value', value);
+        defaultCountry.appendChild(optionEl);
+      }
+    }
+    createCountrySelect();
+    //
+    function parser() {
+      var inValues = getInputValues(),
+          number = inValues.number,
+          defaultRegionCode = inValues.country,
+          carrier = inValues.carrier,
+          isPossible = false,
+          isValid = false,
+          numberType = null,
+          regionCode = null;
+      output = '';
+      setOutput(output);
+
+      try {
+        output += 'Validating ...\n';
+        isPossible = leodido.i18n.PhoneNumbers.isPossibleNumber(number); // FIXME: pass country?
+        output += '\n* isPossibleNumber(\'' + number + '\') -> ';
+        output += isPossible ? 'true' : 'false';
+        if (!isPossible) {
+          // Number not possible
+          output += '\n* isPossibleNumberWithReason(\'' + number + '\') -> ';
+          var PNV = leodido.i18n.PhoneNumbers.RESULT,
+              PNE = leodido.i18n.PhoneNumbers.ERROR,
+              reason = leodido.i18n.PhoneNumbers.isPossibleNumberWithReason(number),
+              code = PNV.getKeyByValue(reason);
+          output += code;
+          if (typeof PNE[code] !== 'undefined') {
+            // PNV.INVALID_COUNTRY_CODE || PNV.TOO_LONG
+            output += '\nERR: ' + PNE[code];
+          } else {
+            // NOTE: validation RESULT has only TOO_SHORT code while ERROR has two type of TOO_SHORT errors
+            if (code.match(/TOO_SHORT/)) {
+              // PNV.TOO_SHORT
+              output += '\nERR: ' + PNE.TOO_SHORT_AFTER_IDD;
+              output += '\nERR: ' + PNE.TOO_SHORT_NSN;
+            } else {
+              // NOTE: should never happen that reason == PNV.IS_POSSIBLE
+              // PNV.IS_POSSIBLE || PNE.NOT_A NUMBER
+              if (reason === PNV.IS_POSSIBLE) {
+                output += '\nERR: something wrong, should never happen that number IS_POSSIBLE at this stage';
+              } else {
+                output += '\nERR: probably an unknown error (code: ' + code + ')';
+              }
+            }
+          }
+        }
+      } catch (exc) {
+        output += '\nEXC: ' + exc + ' [from isPossibleNumber()]';
+      }
+
+      if (isPossible) {
+        try {
+          //  Number possible, check if it is valid
+          var PNT = leodido.i18n.PhoneNumbers.TYPE;
+          if (defaultRegionCode) {
+            isValid = leodido.i18n.PhoneNumbers.isValidNumber(number, defaultRegionCode);
+            regionCode = leodido.i18n.PhoneNumbers.getRegionCodeForNumber(number, defaultRegionCode);
+            var isValid2 = leodido.i18n.PhoneNumbers.isValidNumberForRegion(number, defaultRegionCode);
+            output += '\n* isValidNumber(\'' + number + '\', \'' + defaultRegionCode + '\') -> ' +  (isValid ? 'true' : 'false');
+            output += '\n* isValidNumberForRegion(\'' + number + '\', \'' + defaultRegionCode + '\') -> ' +  (isValid2 ? 'true' : 'false');
+            output += '\n* getRegionCodeForNumber(\'' + number + '\', \'' + defaultRegionCode + '\') -> ' + regionCode;
+          } else {
+            isValid = leodido.i18n.PhoneNumbers.isValidNumber(number);
+            regionCode = leodido.i18n.PhoneNumbers.getRegionCodeForNumber(number);
+            output += '\n* isValidNumber(\'' + number + '\') -> ' +  (isValid ? 'true' : 'false');
+            output += '\n* getRegionCodeForNumber(\'' + number + '\') -> ' + regionCode;
+          }
+          numberType = leodido.i18n.PhoneNumbers.getNumberType(number, regionCode);
+          output += '\n* getNumberType(\'' + number + '\', \'' + regionCode + '\') -> ';
+          output += PNT.getKeyByValue(numberType);
+
+        } catch (exc) {
+          output += '\nEXC: ' + exc + ' [from isValidNumber()]';
+        }
+      }
+
+      if (isValid) {
+        // Formatting
+        output += '\n\nFormatting ...\n';
+        var PNF = leodido.i18n.PhoneNumbers.FORMAT;
+        output += '\n* E164 -> ' + leodido.i18n.PhoneNumbers.formatNumber(number, regionCode, PNF.E164);
+        output += '\n* ORIGINAL -> ' + leodido.i18n.PhoneNumbers.formatOriginal(number, regionCode);
+        output += '\n* NATIONAL -> ' + leodido.i18n.PhoneNumbers.formatNumber(number, regionCode, PNF.NATIONAL);
+        output += '\n* INTERNATIONAL -> ' + leodido.i18n.PhoneNumbers.formatNumber(number, regionCode, PNF.INTERNATIONAL);
+        output += '\n* RFC3966 -> ' + leodido.i18n.PhoneNumbers.formatNumber(number, regionCode, PNF.RFC3966);
+
+        output += '\n* Dial from within US -> ' + leodido.i18n.PhoneNumbers.formatOutOfCountryCalling('US', number, regionCode);
+        output += '\n* Dial from within IT -> ' + leodido.i18n.PhoneNumbers.formatOutOfCountryCalling('IT', number, regionCode);
+        output += '\n* Dial from within FR -> ' + leodido.i18n.PhoneNumbers.formatOutOfCountryCalling('FR', number, regionCode);
+
+        try {
+          output += '\n* Dial from within US (by a mobile) -> ' + leodido.i18n.PhoneNumbers.formatMobileDialing('US', number, regionCode);
+        } catch (exc) {
+          output += '\nEXC: ' + exc + ' [from formatMobileDialing()]';
+        }
+        try {
+          output += '\n* Dial from within IT (by a mobile) -> ' + leodido.i18n.PhoneNumbers.formatMobileDialing('IT', number, regionCode);
+        } catch (exc) {
+          output += '\nEXC: ' + exc + ' [from formatMobileDialing()]';
+        }
+        try {
+          output += '\n* Dial from within FR (by a mobile) -> ' + leodido.i18n.PhoneNumbers.formatMobileDialing('FR', number, regionCode);
+        } catch (exc) {
+          output += '\nEXC: ' + exc + ' [from formatMobileDialing()]';
+        }
+
+        // Carrier code formatting
+        if (carrier) {
+          output += '\n* NATIONAL w/ carrier code -> ' + leodido.i18n.PhoneNumbers.formatNationalWithCarrierCode(carrier, number, regionCode);
+        }
+        output += '\n* National w/ preferred carrier code -> ' + leodido.i18n.PhoneNumbers.formatNationalWithCarrierCode(carrier, number, regionCode);
+
+        // As you type formatting
+        output += '\n\nAsYouTypeFormatter ...\n';
+        var formatter = new leodido.i18n.AsYouTypeFormatter(regionCode);
+        var numberLen = number.length;
+        var wsNum = numberLen.toString().length;
+        for (var i = 0; i < numberLen; ++i) {
+          var prefix = (i + 1).toString().length < wsNum ? new Array(wsNum).join(' ') : '';
+          var inputChar = number.charAt(i);
+          output += '\n' + prefix + getOrdinal(i + 1) +' char -> ' + inputChar;
+          output += ' -> ' + formatter.inputDigit(inputChar);
+        }
+      }
+
+      setOutput(output);
+      return false;
+    }
+  </script>
+
+  </body>
+</html>
+
+

@@ -11,21 +11,25 @@ var gulp = require('gulp'),
     calcdeps = require('calcdeps'),
     sequence = require('run-sequence'),
     gutil = require('gulp-util'),
+    template = require('gulp-template'),
+    rename = require('gulp-rename'),
     minimist = require('minimist'),
     knownArgs = {
-      'string': ['target', 'level'],
+      'string': ['target', 'level', 'country', 'prefix'],
       'default': {
         target: 'full',
         level: 'patch'
       },
-      'alias': { t: 'target', l: 'level' }
-    };
+      'alias': { t: 'target', l: 'level', c: 'country', p: 'prefix' }
+    },
+    metadataGenerated = false;
 
 
 /**
  * @typedef {Object} GulpArguments
  * @property {!string} level
  * @property {!string} target
+ * @property {!string} country
  */
 var GulpArguments;
 
@@ -33,8 +37,9 @@ var GulpArguments;
 /** @type {GulpArguments} */
 var args = minimist(process.argv.slice(2), knownArgs),
     allowedLevels = ['major', 'minor', 'patch', 'prerelease'],
-    allowedTargets = ['full', 'lite', 'test'],
+    allowedTargets = ['full', 'lite', 'bycountry', 'test'],
     targetsHelp = { options: {} },
+    countryHelp = { options: {} },
     levelsHelp = { options: {} };
 var getLevel = function() {
   if (allowedLevels.indexOf(args.level) === -1) {
@@ -48,8 +53,22 @@ var getTarget = function() {
   }
   return args.target;
 };
+var getCountries = function() {
+  if (typeof args.country === 'string') {
+    return args.country.split(',').map(Function.prototype.call, String.prototype.trim);
+  }
+  return [];
+};
+var getPrefix = function() {
+  if (typeof args.prefix === 'string') {
+    return args.prefix + '.';
+  }
+  return getCountries().join('.') + '.';
+};
 levelsHelp.options['level=' + allowedLevels.join('|')] = 'Version level to increment';
 targetsHelp.options['target=' + allowedTargets.join('|')] = 'Files to use';
+countryHelp.options['country=it,es,fr,de,..'] = 'Comma separated list of ISO 3166-1 alpha-2 country codes';
+countryHelp.options['prefix=...'] = 'If specifiec the output file name will be <prefix>.i18n.phonenumbers.min.js';
 
 
 /**
@@ -76,8 +95,9 @@ gulp = require('gulp-help')(gulp, {
  * library: string,
  * output: {full: (!string|*), lite: string, test: string},
  * sources: string[],
+ * bycountry: Array,
  * tests: Array,
- * metadata: {full: string, lite: string, test: string},
+ * metadata: {full: string, lite: string, test: string, bycountry: string},
  * deps: Array
  * }}
  */
@@ -87,6 +107,7 @@ var settings = {
   output: {
     full: bundle.main,
     lite: 'lite.' + bundle.main,
+    bycountry: 'country.metadata.tmpl',
     test: 'test.' + bundle.main
   },
   sources: [
@@ -102,10 +123,14 @@ var settings = {
     'src/phonenumbers.js',
     'src/asyoutypeformatter.js'
   ],
+  bycountry: [
+    'src/filter/metadata.js'
+  ],
   tests: [],
   metadata: {
     full: 'bower_components/libphonenumber/javascript/i18n/phonenumbers/metadata.js',
     lite: 'bower_components/libphonenumber/javascript/i18n/phonenumbers/metadatalite.js',
+    bycountry: 'bower_components/libphonenumber/javascript/i18n/phonenumbers/metadata.js',
     test: 'bower_components/libphonenumber/javascript/i18n/phonenumbers/metadatafortesting.js'
   },
   deps: []
@@ -127,11 +152,13 @@ gulp.task('lint', 'Lint JS source files', [], function() {
   var src = {
         full: settings.sources,
         lite: settings.sources,
+        bycountry: settings.bycountry,
         test: settings.tests
       },
       pattern = {
         full: ['*asyoutypeformatter*', '*phonenumberutil*'],
         lite: ['*asyoutypeformatter*', '*phonenumberutil*'],
+        bycountry: [],
         test: ['*asyoutypeformatter*', '*phonenumberutil*', '*testing*']
       },
       lintOptions = {
@@ -152,11 +179,12 @@ gulp.task('deps', false, ['lint'], function(done) {
   var src = {
         full: settings.sources,
         lite: settings.sources,
+        bycountry: settings.bycountry,
         test: settings.tests
       },
       options = { deps: [], exclude: [] },
       source = src[getTarget()],
-      metadata = [settings.metadata[getTarget()]];
+      metadata = [metadataGenerated || settings.metadata[getTarget()]]; //[settings.metadata[getTarget()]];
 
   options.input = metadata.concat(source);
   options.path = [settings.library];
@@ -168,6 +196,9 @@ gulp.task('deps', false, ['lint'], function(done) {
       process.exit(1);
     } else {
       settings.deps = results;
+      for (var i = 0; i < settings.deps.length; i++) {
+        gutil.log('Dep #' + (i + 1), gutil.colors.green(settings.deps[i]));
+      }
       done();
     }
   });
@@ -175,17 +206,28 @@ gulp.task('deps', false, ['lint'], function(done) {
 
 gulp.task('compile', false, ['deps'], function() {
   var target = getTarget(),
+      wrapper = '(function(){%output%}).call(window);', //'(function(){%output%})();',
       level = 'VERBOSE',
       errors = ['accessControls', 'ambiguousFunctionDecl', 'checkDebuggerStatement', 'checkRegExp',
         'checkTypes', 'checkVars', 'const', 'constantProperty', 'deprecated', 'duplicate', 'duplicateMessage',
         'es5Strict', 'externsValidation', 'fileoverviewTags', 'globalThis', 'internetExplorerChecks', 'invalidCasts',
         'misplacedTypeAnnotation', 'missingProperties', 'nonStandardJsDocs', 'strictModuleDepCheck', 'suspiciousCode',
         'typeInvalidation', 'undefinedNames', 'undefinedVars', 'unknownDefines', 'uselessCode', 'visibility'];
+
+  if (getTarget() === allowedTargets[2]) {
+    wrapper = require('fs').readFileSync('src/template/country.metadata.tmpl', 'utf-8');
+  }
+
+  var outputFile = settings.output[target];
+  if (metadataGenerated) {
+    outputFile = getPrefix() + outputFile;
+  }
+
   var cflags = {
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
     language_in: 'ECMASCRIPT5_STRICT',
     generate_exports: true,
-    output_wrapper: '(function(){%output%})();', // NOTE: IIFE
+    output_wrapper: wrapper, // NOTE: IIFE
     warning_level: level,
     jscomp_error: errors
   };
@@ -193,14 +235,19 @@ gulp.task('compile', false, ['deps'], function() {
       .pipe(debug({title: 'Input'}))
       .pipe(ccompiler({
         compilerPath: settings.compiler,
-        fileName: settings.output[target],
+        fileName: outputFile,
         compilerFlags: cflags
       }));
 });
 
 // Strip multiline comments
 gulp.task('rm-ml-comments', false, [], function() {
-  return gulp.src([settings.output[getTarget()]])
+  var sourceFile = settings.output[getTarget()];
+  if (metadataGenerated) {
+    sourceFile = getPrefix() + sourceFile;
+  }
+
+  return gulp.src([sourceFile])
       .pipe(debug({ title: 'Removing multiline comments from '}))
       .pipe(replace(/(?:\/\*(?:[\s\S]*?)\*\/)/g, ''))
       .pipe(gulp.dest('./'));
@@ -211,17 +258,63 @@ gulp.task('build', 'Build the library from source files', [], function(cb) {
 }, targetsHelp);
 
 gulp.task('clean', 'Clean build', [], function(cb) {
-  del([settings.output[getTarget()], 'npm-debug.log'], cb);
+  var target = getTarget();
+  var files = ['npm-debug.log'];
+  files.push(settings.output[target]);
+  for (var key in settings.output) {
+    if (settings.output.hasOwnProperty(key)) {
+      if (key !== target) {
+        files.push('!' + settings.output[key]);
+      }
+    }
+  }
+  del(files, cb);
 }, targetsHelp);
 
 gulp.task('version', 'Print the library version', [], function() {
   return gutil.log('Library', gutil.colors.magenta(bundle.name) + ',', gutil.colors.magenta(bundle.version));
 });
 
-gulp.task('bump', 'Bump version up for a new release', function() {
-  return gulp.src(['./bower.json', 'package.json'])
+gulp.task('bump', 'Bump version up for a new release', [], function() {
+  return gulp.src(['./bower.json', './package.json'])
       .pipe(bump({ type: getLevel() }))
       .pipe(gulp.dest('./'));
 }, levelsHelp);
+
+gulp.task('gen-metadata', false, [], function() {
+  var countryCodes = getCountries();
+  var metadataFileName = getPrefix() + 'metadata.js';
+  var outputDirectory = 'src/';
+  var stream = gulp.src(settings.output.bycountry)
+      .pipe(template({
+        namespace: 'i18n.phonenumbers.metadata',
+        countries: countryCodes,
+        mapJsdoc: '/**\n* A mapping from a country calling code to the region codes which denote the\n* region represented by that country calling code. In the case of multiple\n* countries sharing a calling code, such as the NANPA regions, the one\n       * indicated with "isMainCountryForCode" in the metadata should be first.\n* @type {!Object.<number, Array.<string>>}\n*/',
+        dataJsdoc: '/**\n* A mapping from a region code to the PhoneMetadata for that region.\n* @type {!Object.<string, Array>}\n*/'
+      }))
+      .pipe(rename(metadataFileName))
+      .pipe(gulp.dest(outputDirectory));
+  metadataGenerated = outputDirectory + metadataFileName;
+  return stream;
+}, countryHelp);
+
+gulp.task('reset-target', false, [], function(cb) {
+  args.target = allowedTargets[0]; // enforce target 'full'
+  cb();
+});
+
+gulp.task('countrybuild', 'Build a library that supports only specified countries', [], function(cb) {
+  var countryCodes = getCountries();
+  if (countryCodes.length > 0) {
+    args.target = allowedTargets[2]; // enforce target 'bycountry'
+    // 1 * compile metadata template
+    // 2 * generate metadata from compiled template
+    // 3 * remove compiled template
+    // 4 * build a full version of the library with only the generated metadata
+    sequence('build', 'gen-metadata', 'clean', 'reset-target', 'compile', 'rm-ml-comments', cb);
+  } else {
+    gutil.log(gutil.colors.magenta('ERROR:'), 'almost one valid country code needed.');
+  }
+}, countryHelp);
 
 // TODO: sourcemap

@@ -1,13 +1,14 @@
 {
   "name": "i18n-phonenumbers",
+  "version": "0.703.2",
   "description": "Parse, format, and validate international phone numbers through Google's libphonenumber",
-  "version": "0.703.1",
   "authors": [
     "Leo Di Donato <leodidonato@gmail.com> (http://git.io/leodido)"
   ],
   "main": [
     "i18n.phonenumbers.min.js",
-    "lite.i18n.phonenumbers.min.js"
+    "lite.i18n.phonenumbers.min.js",
+    "eu.extended.i18n.phonenumbers.min.js"
   ],
   "license": "Apache-2.0",
   "repository": {
@@ -22,10 +23,11 @@
     "gulpfile.js",
     "bower.json",
     "package.json",
+    "gjslint.conf",
     "src"
   ],
   "devDependencies": {
-    "closure-library": "google/closure-library",
+    "closure-library": "git@github.com:google/closure-library.git#8973559e3559c4e9ecd0bf89f219db73ad92f1cc",
     "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.tar.gz",
     "libphonenumber": "git@github.com:googlei18n/libphonenumber.git#libphonenumber-7.0.3"
   },

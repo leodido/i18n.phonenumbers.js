@@ -1,6 +1,6 @@
 {
   "name": "i18n-phonenumbers",
-  "version": "0.703.1",
+  "version": "0.703.2",
   "description": "Parse, format, and validate international phone numbers through Google's libphonenumber",
   "main": "i18n.phonenumbers.min.js",
   "author": {
@@ -16,7 +16,7 @@
   "homepage": "http://github.com/leodido/i18n.phonenumbers.js",
   "devDependencies": {
     "bower": "~1.3.12",
-    "calcdeps": "^0.2.0",
+    "calcdeps": "0.2.0",
     "del": "^1.0.0",
     "gulp": "~3.8.10",
     "gulp-bump": "^0.1.13",
@@ -25,7 +25,9 @@
     "gulp-filter": "^2.0.2",
     "gulp-gjslint": "^0.1.4",
     "gulp-help": "^1.3.1",
+    "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.5.3",
+    "gulp-template": "^3.0.0",
     "gulp-util": "^3.0.4",
     "minimist": "^1.1.0",
     "run-sequence": "^1.0.2"
@@ -33,6 +35,20 @@
   "scripts": {
     "postinstall": "./node_modules/.bin/bower install",
     "release": "./node_modules/.bin/gulp build -t full && ./node_modules/.bin/gulp build -t lite",
+    "release-eurozone19": "./node_modules/.bin/gulp countrybuild -c at,be,cy,ee,fi,fr,de,gr,ie,it,lv,lt,lu,mt,nl,pt,sk,si,es -p eurozone19",
+    "release-schengen26": "./node_modules/.bin/gulp countrybuild -c at,be,cz,dk,ee,fi,fr,de,gr,hu,is,it,lv,li,lt,lu,mt,nl,no,pl,pt,sk,si,es,se,ch -p schengen26",
+    "release-eu28": "./node_modules/.bin/gulp countrybuild -c at,be,bg,hr,cy,cz,dk,ee,fi,fr,de,gr,hu,ie,it,lv,lt,lu,mt,nl,pl,pt,ro,sk,si,es,se,gb -p eu28",
+    "release-eu-extended": "./node_modules/.bin/gulp countrybuild -c at,be,bg,hr,cy,cz,dk,ee,fi,fr,de,gr,hu,ie,it,lv,lt,lu,mt,nl,pl,pt,ro,sk,si,es,se,gb,gf,gp,mq,yt,re,mf,gi,ax,tr,is,me,rs,mk,al,ba,ad,mc,sm,va -p eu.extended",
+    "release-efta": "./node_modules/.bin/gulp countrybuild -c is,li,no,ch -p efta",
+    "release-eea": "./node_modules/.bin/gulp countrybuild -c at,be,bg,hr,cy,cz,dk,ee,fi,fr,de,gr,hu,is,ie,it,lv,li,lt,lu,mt,nl,no,pl,pt,ro,sk,si,es,se,ch,gb -p eea",
+    "release-nordiccouncil": "./node_modules/.bin/gulp countrybuild -c dk,fi,is,no,es -p nordiccouncil",
+    "release-bsec12": "./node_modules/.bin/gulp countrybuild -c al,am,az,bg,ge,gr,md,ro,ru,tr,ua,rs -p bsec12",
+    "release-visegradgroup": "./node_modules/.bin/gulp countrybuild -c hu,pl,cz,sk -p visegradgroup",
+    "release-cefta": "./node_modules/.bin/gulp countrybuild -c rs,me,md,al,mk,ba -p cefta",
+    "release-balticassembly": "./node_modules/.bin/gulp countrybuild -c ee,lv,lt -p balticassembly",
+    "release-guam": "./node_modules/.bin/gulp countrybuild -c ge,az,md,ua -p guam",
+    "release-benelux": "./node_modules/.bin/gulp countrybuild -c bg,nl,lu -p benelux",
+    "release-eucouncil": "./node_modules/.bin/gulp countrybuild -c ch,is,li,no,se,fi,dk,hu,pl,cz,sk,bg,nl,lu,ee,lv,lt,cy,ie,gb,al,am,az,bg,ge,gr,md,ro,ru,tr,ua,rs,mk,ba,me,hr,mc,ad,sm,it,es,fr,pt,de,mt,si,at -p eucouncil",
     "test": "./node_modules/.bin/gulp build -t test"
   },
   "keywords": [
