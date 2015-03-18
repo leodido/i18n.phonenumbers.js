@@ -2,9 +2,114 @@
 <html>
 <head lang="en">
   <meta charset="UTF-8">
-  <title></title>
+  <title>Example phone number generator</title>
+  <script src="../i18n.phonenumbers.min.js"></script>
 </head>
 <body>
+
+  <h2>Example phone number generator</h2>
+
+  <form>
+    <p>
+      <label><strong>Select regions and phone number types</strong>
+        <br/>
+        <select name="regions" id="regions" multiple size="8"></select>
+        <select name="types" id="types" multiple size="8"></select>
+      </label>
+    </p>
+    <input type="button" value="Generate" onclick="return generate();" />
+    <input type="reset" value="Reset" />
+    <hr/>
+    <strong>Output</strong>
+    <br/>
+    <pre id="output"></pre>
+  </form>
+
+  <script type="text/javascript">
+    Object.prototype.getKeyByValue = function(value) {
+      for (var prop in this) {
+        if (this.hasOwnProperty(prop)) {
+          if (this[ prop ] === value)
+            return prop;
+        }
+      }
+    };
+    var populateSelect = function() {
+      for (var i = 0; i < allRegions.length; i++) {
+        var optionEl = document.createElement('OPTION');
+        optionEl.setAttribute('label', allRegions[i]);
+        optionEl.setAttribute('value', allRegions[i]);
+        regionSelect.appendChild(optionEl);
+      }
+    };
+    var populateType = function() {
+      var typeKeys = Object.keys(allTypes);
+      for (var i = 0; i < typeKeys.length; i++) {
+        var type = typeKeys[i],
+            label = type.replace(/_/g, ' ').toLowerCase();
+        label = label.charAt(0).toUpperCase() + label.slice(1); // capitalize 1st letter
+        var optionEl = document.createElement('OPTION');
+        optionEl.setAttribute('label', label);
+        optionEl.setAttribute('value', allTypes[type]);
+        typeSelect.appendChild(optionEl);
+      }
+    };
+
+    var allRegions = leodido.i18n.PhoneNumbers.getSupportedRegions(),
+        allTypes = leodido.i18n.PhoneNumbers.TYPE,
+        output = '',
+        regionSelect = document.getElementById('regions'),
+        typeSelect = document.getElementById('types'),
+        outputArea = document.getElementById('output'),
+        getSelectValues = function(select) {
+          var result = [];
+          var options = select && select.options;
+          var opt;
+
+          for (var i = 0, len = options.length; i < len; i++) {
+            opt = options[i];
+            opt.selected && result.push(opt.value || opt.text);
+          }
+          return result;
+        },
+        getInputValues = function() {
+          return {
+            regions: getSelectValues(regionSelect) || null,
+            types: getSelectValues(typeSelect) || null
+          };
+        },
+        setOutput = function(output) {
+          while (outputArea.firstChild) {
+            outputArea.removeChild(outputArea.firstChild);
+          }
+          outputArea.appendChild(document.createTextNode(output));
+        };
+
+
+    populateSelect();
+    populateType();
+
+
+    var generate = function() {
+      var inValues = getInputValues(),
+          regions = inValues.regions,
+          types = inValues.types.map(Number);
+      output = '';
+      setOutput(output);
+
+      for (var r = 0; r < regions.length; r++) {
+        var regionCode = regions[r];
+        for (var t = 0; t < types.length; t++) {
+          var typeValue = types[t];
+          var exampleNumber = leodido.i18n.PhoneNumbers.getExampleNumber(regionCode, typeValue);
+          output += '\n* region: "' + regionCode + '", type: "' + allTypes.getKeyByValue(typeValue) + '" -> ' + (exampleNumber ? exampleNumber : ' NOT AVAILABLE ');
+        }
+      }
+
+      setOutput(output);
+      return false;
+    }
+  </script>
 
 </body>
 </html>

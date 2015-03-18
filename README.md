@@ -3,7 +3,7 @@ i18n phone numbers
 
 **Parse, format, and validate international phone numbers through Google's libphonenumber**.
 
-[![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-Apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
+[![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
 
 This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
 
@@ -11,7 +11,7 @@ There are two main files:
 
 1. library with **full metadata** (i.e. `i18n.phonenumbers.min.js`)
 
-2. library with **lite metadata**, that lacks example phone numbers (i.e. `lite.i18n.phonenumbers.min.js`)
+2. library with **lite metadata**, that lacks example phone numbers (i.e. `lite.i18n...`)
 
 However, **other versions (smaller) of the library can be built restricting countries metadata**. E.g.,
 
@@ -40,9 +40,24 @@ Differences from other forks/wrappers
 
 3. Automated build system
 
-4. Build system supports various build types (e.g., with full metadata, with specific metadata)
+4. Support for various build types (e.g., with full metadata, with country's specific metadata)
 
 5. Easy to maintain, simple to upgrade
+
+Install
+-------
+
+Install it via `bower`.
+
+```
+bower install i18n-phonenumbers
+```
+
+Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s in the repository root or use [rawgit](https://rawgit.com).
+
+```html
+<script src="https://cdn.rawgit.com/leodido/i18n.phonenumbers.js/master/i18n.phonenumbers.min.js"></script>
+```
 
 Overview
 --------
@@ -100,9 +115,6 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 * `isPossibleNumberWithReason(phoneNumber, regionCode)`
 
     As above but gives us additional info about the provided phone number.
-    
-    
-
 
 The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Google's `i18n.phonenumbers.AsYouTypeFormatter`. It can be used to format phone numbers on-the-fly when users enter each digit, with this functions:
 
@@ -117,16 +129,10 @@ The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Googl
 
 - Unless otherwise specified the `regionCode` always defaults to 'US'.
 
-Install
--------
 
-Install it via `bower`.
+#### Examples
 
-```
-bower install i18n-phonenumbers
-```
-
-Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s in the repository root.
+In the `demo` directory you can find examples covering phone number validation, formatting (as you type or one shot) and generation.
 
 Update
 ------
