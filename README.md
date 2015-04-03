@@ -31,6 +31,14 @@ Do you want to format and validate only italian phone numbers?
 
 Simple, [clone and install](#update) the repository and then run `gulp countrybuild --country=it`. You'll get a file 10 times smaller than normal.
 
+Demos
+-----
+
+A demo demonstrating **i18n phone number parsing** is available [here](http://bit.ly/phonenumbers-generator).
+
+You don't know Belize's phone numbers? No hassle. At this [link](http://bit.ly/parse-phonenumbers) you can **generate example phone numbers** for each country in the world!
+
+
 Differences from other forks/wrappers
 -------------------------------------
 
