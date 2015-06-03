@@ -146,8 +146,8 @@ var settings = {
  * // NOTE: test files need source files
  */
 settings.tests = settings.sources.concat([
-  // 'bower_components/libphonenumber/javascript/i18n/phonenumbers/regioncodefortesting.js',
-  // 'bower_components/libphonenumber/javascript/i18n/phonenumbers/phonenumberutil_test.js', // FIXME
+  'bower_components/libphonenumber/javascript/i18n/phonenumbers/regioncodefortesting.js',
+  'bower_components/libphonenumber/javascript/i18n/phonenumbers/phonenumberutil_test.js', // FIXME
   'bower_components/libphonenumber/javascript/i18n/phonenumbers/asyoutypeformatter_test.js'
 ]);
 
@@ -275,7 +275,6 @@ gulp.task('clean', 'Clean build', [], function(cb) {
       }
     }
   }
-  gutil.log(files); // FIXME: remove me
   del(files, cb);
 }, targetsHelp);
 
