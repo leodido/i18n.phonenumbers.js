@@ -5,31 +5,28 @@ i18n phone numbers
 
 [![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
 
-This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
+This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It wraps Google's [libphonenumber](https://github.com/googlei18n/libphonenumber) library.
 
 There are two main files:
 
-1. library with **full metadata** (i.e. `i18n.phonenumbers.min.js`)
+1. library with **full metadata** (i.e. **i18n.phonenumbers.min.js**)
+2. library with **lite metadata**, that lacks example phone numbers (i.e. **lite.i18n...**)
 
-2. library with **lite metadata**, that lacks example phone numbers (i.e. `lite.i18n...`)
-
-However, **other versions (smaller) of the library can be built restricting countries metadata**. E.g.,
+However, **other versions** (smaller) **of the library can be built restricting countries metadata**. E.g.,
 
 * library containing only europe (extended) metadata
-
 * library containing only eurozone metadata
-
 * etc. etc.
 
-See [package.json](./package.json) for other available shortcut build scripts.
+See [package.json](./package.json#L38-L51) for other available shortcut build scripts.
 
-Generally **you can build any version of the library** using the `gulp countrybuild` command (see [below](#build)).
+Generally **you can build any version of the library** (see [below](#build) for details).
 
 This feature is very useful when your application needs **only the phone numbers of a specific country set** and you want to **save space**.
 
 Do you want to format and validate only italian phone numbers?
 
-Simple, [clone and install](#update) the repository and then run `gulp countrybuild --country=it`. You'll get a file 10 times smaller than normal.
+[Clone and install](#update) the repository; then run `gulp countrybuild --country=it`. You'll get a file 10 times smaller than the full one.
 
 Demos
 -----
