@@ -26,27 +26,29 @@ This feature is very useful when your application needs **only the phone numbers
 
 Do you want to format and validate only italian phone numbers?
 
-[Clone and install](#update) the repository; then run `gulp countrybuild --country=it`. You'll get a file 10 times smaller than the full one.
+Clone the repository, install its dependencies, and then run:
+
+```
+gulp countrybuild --country=it
+```
+
+You'll get a file 10 times smaller than the full one.
 
 Demos
 -----
 
-A demo demonstrating **i18n phone number parsing** is available [here](http://bit.ly/phonenumbers-generator).
+A demo demonstrating **i18n phone number parsing** is available [here](http://bit.ly/parse-phonenumbers).
 
-You don't know Belize's phone numbers? No hassle. At this [link](http://bit.ly/parse-phonenumbers) you can **generate example phone numbers** for each country in the world!
+You don't know Belize's phone numbers? No hassle. At this [link](http://bit.ly/phonenumbers-generator) you can **generate example phone numbers** for each country in the world!
 
 
 Differences from other forks/wrappers
 -------------------------------------
 
 1. Built-in integration with Google Closure (compiler and library)
-
-2. Automated fetch (via bower) of last version of Google's libphonenumber library
-
-3. Automated build system
-
+2. Automated fetch (via bower) of the Google's libphonenumber library
+3. Fully automated build system
 4. Support for various build types (e.g., with full metadata, with country's specific metadata)
-
 5. Easy to maintain, simple to upgrade
 
 Install
@@ -58,7 +60,7 @@ Install it via `bower`.
 bower install i18n-phonenumbers
 ```
 
-Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s in the repository root or use [rawgit](https://rawgit.com).
+Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s or use [rawgit](https://rawgit.com).
 
 ```html
 <script src="https://cdn.rawgit.com/leodido/i18n.phonenumbers.js/master/i18n.phonenumbers.min.js"></script>
@@ -121,7 +123,7 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 
     As above but gives us additional info about the provided phone number.
 
-The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Google's `i18n.phonenumbers.AsYouTypeFormatter`. It can be used to format phone numbers on-the-fly when users enter each digit, with this functions:
+The exported object `leodido.i18n.AsYouTypeFormatter` is a proxy to Google's `i18n.phonenumbers.AsYouTypeFormatter`. It can be used to format phone numbers on-the-fly when users enter each digit, with this functions:
 
 * `inputDigit(nextChar)`
 
