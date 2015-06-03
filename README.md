@@ -165,10 +165,7 @@ Or simply **DIY**.
 
 3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**. I'll be happy to merge it.
 
-    ```
-    # make patch
-    # make release
-    ```
+Makefile contains helpers to do it.
 
 Build
 -----
