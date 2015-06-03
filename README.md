@@ -63,7 +63,7 @@ Install it via `bower`.
 Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s or use [rawgit](https://rawgit.com).
 
 ```html
-<script src="https://cdn.rawgit.com/leodido/i18n.phonenumbers.js/master/i18n.phonenumbers.min.js"></script>
+<script src="https://cdn.rawgit.com/leodido/i18n.phonenumbers.js/master/dist/i18n.phonenumbers.min.js"></script>
 ```
 
 Overview
@@ -165,7 +165,7 @@ Or simply **DIY**.
 
 3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**. I'll be happy to merge it.
 
-Makefile contains helpers to do it.
+Makefile contains helpers to upgrade the library.
 
 Build
 -----
