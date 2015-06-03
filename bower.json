@@ -31,5 +31,13 @@
     "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.tar.gz",
     "libphonenumber": "git@github.com:googlei18n/libphonenumber.git#libphonenumber-7.0.3"
   },
-  "keywords": []
+  "keywords": [
+    "phone",
+    "telephone",
+    "phone number",
+    "mobile phone",
+    "i18n",
+    "validator",
+    "formatter"
+  ]
 }

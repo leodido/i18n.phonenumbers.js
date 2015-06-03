@@ -29,7 +29,7 @@ Do you want to format and validate only italian phone numbers?
 Clone the repository, install its dependencies, and then run:
 
 ```
-gulp countrybuild --country=it
+# gulp countrybuild --country=it
 ```
 
 You'll get a file 10 times smaller than the full one.
@@ -57,7 +57,7 @@ Install
 Install it via `bower`.
 
 ```
-bower install i18n-phonenumbers
+# bower install i18n-phonenumbers
 ```
 
 Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s or use [rawgit](https://rawgit.com).
@@ -139,7 +139,7 @@ The exported object `leodido.i18n.AsYouTypeFormatter` is a proxy to Google's `i1
 
 #### Examples
 
-In the `demo` directory you can find examples covering phone number validation, formatting (as you type or one shot) and generation.
+In the **demo** directory you can find examples covering phone number validation, formatting (as you type or one shot) and generation.
 
 Update
 ------
@@ -153,21 +153,21 @@ Or simply **DIY**.
 1. Clone this repo
 
     ```
-    $ git clone git@github.com:leodido/ni18n.phonenumbers.js.git
-    $ cd i18n.phonenumbers.js/
+    # git clone git@github.com:leodido/ni18n.phonenumbers.js.git
+    # cd i18n.phonenumbers.js/
     ```
 
 2. Install it locally (you will need `npm`, of course) ...
     
     ```
-    $ npm install
+    # npm install
     ```
 
-3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**.
+3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**. I'll be happy to merge it.
 
     ```
-    $ make patch
-    $ make release
+    # make patch
+    # make release
     ```
 
 Build
