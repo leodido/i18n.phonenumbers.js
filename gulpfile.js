@@ -14,6 +14,7 @@ var gulp = require('gulp'),
     template = require('gulp-template'),
     rename = require('gulp-rename'),
     minimist = require('minimist'),
+    path = require('path'),
     knownArgs = {
       'string': ['target', 'level', 'country', 'prefix'],
       'default': {
@@ -68,7 +69,7 @@ var getPrefix = function() {
 levelsHelp.options['level=' + allowedLevels.join('|')] = 'Version level to increment';
 targetsHelp.options['target=' + allowedTargets.join('|')] = 'Files to use';
 countryHelp.options['country=it,es,fr,de,..'] = 'Comma separated list of ISO 3166-1 alpha-2 country codes';
-countryHelp.options['prefix=...'] = 'If specifiec the output file name will be <prefix>.i18n.phonenumbers.min.js';
+countryHelp.options['prefix=...'] = 'It specifies the output file name will be <prefix>.i18n.phonenumbers.min.js';
 
 
 /**
@@ -95,6 +96,7 @@ gulp = require('gulp-help')(gulp, {
  * library: string,
  * output: {full: (!string|*), lite: string, test: string},
  * sources: string[],
+ * dist: !string,
  * bycountry: Array,
  * tests: Array,
  * metadata: {full: string, lite: string, test: string, bycountry: string},
@@ -123,6 +125,7 @@ var settings = {
     'src/phonenumbers.js',
     'src/asyoutypeformatter.js'
   ],
+  dist: './dist',
   bycountry: [
     'src/filter/metadata.js'
   ],
@@ -143,8 +146,8 @@ var settings = {
  * // NOTE: test files need source files
  */
 settings.tests = settings.sources.concat([
-  // 'bower_components/libphonenumber/javascript/i18n/phonenumbers/regioncodefortesting.js',
-  // 'bower_components/libphonenumber/javascript/i18n/phonenumbers/phonenumberutil_test.js', // FIXME
+  'bower_components/libphonenumber/javascript/i18n/phonenumbers/regioncodefortesting.js',
+  'bower_components/libphonenumber/javascript/i18n/phonenumbers/phonenumberutil_test.js', // FIXME
   'bower_components/libphonenumber/javascript/i18n/phonenumbers/asyoutypeformatter_test.js'
 ]);
 
@@ -184,7 +187,7 @@ gulp.task('deps', false, ['lint'], function(done) {
       },
       options = { deps: [], exclude: [] },
       source = src[getTarget()],
-      metadata = [metadataGenerated || settings.metadata[getTarget()]]; //[settings.metadata[getTarget()]];
+      metadata = [metadataGenerated || settings.metadata[getTarget()]];
 
   options.input = metadata.concat(source);
   options.path = [settings.library];
@@ -222,6 +225,7 @@ gulp.task('compile', false, ['deps'], function() {
   if (metadataGenerated) {
     outputFile = getPrefix() + outputFile;
   }
+  outputFile = path.join(settings.dist, outputFile);
 
   var cflags = {
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
@@ -237,7 +241,8 @@ gulp.task('compile', false, ['deps'], function() {
         compilerPath: settings.compiler,
         fileName: outputFile,
         compilerFlags: cflags
-      }));
+      }))
+      .pipe(gulp.dest('./'));
 });
 
 // Strip multiline comments
@@ -246,11 +251,12 @@ gulp.task('rm-ml-comments', false, [], function() {
   if (metadataGenerated) {
     sourceFile = getPrefix() + sourceFile;
   }
+  sourceFile = path.join(settings.dist, sourceFile);
 
   return gulp.src([sourceFile])
-      .pipe(debug({ title: 'Removing multiline comments from '}))
+      .pipe(debug({ title: 'Removing multiline comments from' }))
       .pipe(replace(/(?:\/\*(?:[\s\S]*?)\*\/)/g, ''))
-      .pipe(gulp.dest('./'));
+      .pipe(gulp.dest(settings.dist));
 });
 
 gulp.task('build', 'Build the library from source files', [], function(cb) {
@@ -260,11 +266,12 @@ gulp.task('build', 'Build the library from source files', [], function(cb) {
 gulp.task('clean', 'Clean build', [], function(cb) {
   var target = getTarget();
   var files = ['npm-debug.log'];
-  files.push(settings.output[target]);
+  files.push(path.join(settings.dist, settings.output[target]));
   for (var key in settings.output) {
     if (settings.output.hasOwnProperty(key)) {
+      var fname = path.join(settings.dist, settings.output[key]);
       if (key !== target) {
-        files.push('!' + settings.output[key]);
+        files.push('!' + fname);
       }
     }
   }
@@ -284,23 +291,28 @@ gulp.task('bump', 'Bump version up for a new release', [], function() {
 gulp.task('gen-metadata', false, [], function() {
   var countryCodes = getCountries();
   var metadataFileName = getPrefix() + 'metadata.js';
-  var outputDirectory = 'src/';
-  var stream = gulp.src(settings.output.bycountry)
+  var outputDirectory = './src';
+  var stream = gulp.src(path.join(settings.dist, settings.output.bycountry))
       .pipe(template({
         namespace: 'i18n.phonenumbers.metadata',
         countries: countryCodes,
-        mapJsdoc: '/**\n* A mapping from a country calling code to the region codes which denote the\n* region represented by that country calling code. In the case of multiple\n* countries sharing a calling code, such as the NANPA regions, the one\n       * indicated with "isMainCountryForCode" in the metadata should be first.\n* @type {!Object.<number, Array.<string>>}\n*/',
+        mapJsdoc: '/**\n* A mapping from a country calling code to the region codes which denote the\n* region represented by that country calling code. In the case of multiple\n* countries sharing a calling code, such as the NANPA regions, the one\n* indicated with "isMainCountryForCode" in the metadata should be first.\n* @type {!Object.<number, Array.<string>>}\n*/',
         dataJsdoc: '/**\n* A mapping from a region code to the PhoneMetadata for that region.\n* @type {!Object.<string, Array>}\n*/'
       }))
       .pipe(rename(metadataFileName))
       .pipe(gulp.dest(outputDirectory));
-  metadataGenerated = outputDirectory + metadataFileName;
+  metadataGenerated = path.join(outputDirectory, metadataFileName);
   return stream;
 }, countryHelp);
 
 gulp.task('reset-target', false, [], function(cb) {
   args.target = allowedTargets[0]; // enforce target 'full'
   cb();
+});
+
+gulp.task('del-metadata', false, [], function(cb) {
+  var metadataFile = path.join('./src', getPrefix() + 'metadata.js');
+  del(metadataFile, cb);
 });
 
 gulp.task('countrybuild', 'Build a library that supports only specified countries', [], function(cb) {
@@ -311,10 +323,8 @@ gulp.task('countrybuild', 'Build a library that supports only specified countrie
     // 2 * generate metadata from compiled template
     // 3 * remove compiled template
     // 4 * build a full version of the library with only the generated metadata
-    sequence('build', 'gen-metadata', 'clean', 'reset-target', 'compile', 'rm-ml-comments', cb);
+    sequence('build', 'gen-metadata', 'clean', 'reset-target', 'compile', 'rm-ml-comments', 'del-metadata', cb);
   } else {
     gutil.log(gutil.colors.magenta('ERROR:'), 'almost one valid country code needed.');
   }
 }, countryHelp);
-
-// TODO: sourcemap

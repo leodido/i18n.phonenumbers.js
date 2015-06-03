@@ -5,43 +5,50 @@ i18n phone numbers
 
 [![Bower](https://img.shields.io/bower/v/i18n-phonenumbers.svg?style=flat-square)](http://github.com/leodido/i18n.phonenumbers.js/releases/latest) [![License](https://img.shields.io/badge/license-apache--2.0-yellowgreen.svg?style=flat-square)](http://opensource.org/licenses/Apache-2.0)
 
-This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It uses the last version of Google's [libphonenumber](https://github.com/googlei18n/libphonenumber).
+This repository provides an already compiled JavaScript library aimed to parse, to format and to validate international telephone numbers. It wraps Google's [libphonenumber](https://github.com/googlei18n/libphonenumber) library.
 
 There are two main files:
 
-1. library with **full metadata** (i.e. `i18n.phonenumbers.min.js`)
+1. library with **full metadata** (i.e. **i18n.phonenumbers.min.js**)
+2. library with **lite metadata**, that lacks example phone numbers (i.e. **lite.i18n...**)
 
-2. library with **lite metadata**, that lacks example phone numbers (i.e. `lite.i18n...`)
-
-However, **other versions (smaller) of the library can be built restricting countries metadata**. E.g.,
+However, **other versions** (smaller) **of the library can be built restricting countries metadata**. E.g.,
 
 * library containing only europe (extended) metadata
-
 * library containing only eurozone metadata
-
 * etc. etc.
 
-See [package.json](./package.json) for other available shortcut build scripts.
+See [package.json](./package.json#L38-L51) for other available shortcut build scripts.
 
-Generally **you can build any version of the library** using the `gulp countrybuild` command (see [below](#build)).
+Generally **you can build any version of the library** (see [below](#build) for details).
 
 This feature is very useful when your application needs **only the phone numbers of a specific country set** and you want to **save space**.
 
 Do you want to format and validate only italian phone numbers?
 
-Simple, [clone and install](#update) the repository and then run `gulp countrybuild --country=it`. You'll get a file 10 times smaller than normal.
+Clone the repository, install its dependencies, and then run:
+
+```
+# gulp countrybuild --country=it
+```
+
+You'll get a file 10 times smaller than the full one.
+
+Demos
+-----
+
+A demo demonstrating **i18n phone number parsing** is available [here](http://bit.ly/parse-phonenumbers).
+
+You don't know Belize's phone numbers? No hassle. At this [link](http://bit.ly/phonenumbers-generator) you can **generate example phone numbers** for each country in the world!
+
 
 Differences from other forks/wrappers
 -------------------------------------
 
 1. Built-in integration with Google Closure (compiler and library)
-
-2. Automated fetch (via bower) of last version of Google's libphonenumber library
-
-3. Automated build system
-
+2. Automated fetch (via bower) of the Google's libphonenumber library
+3. Fully automated build system
 4. Support for various build types (e.g., with full metadata, with country's specific metadata)
-
 5. Easy to maintain, simple to upgrade
 
 Install
@@ -50,13 +57,13 @@ Install
 Install it via `bower`.
 
 ```
-bower install i18n-phonenumbers
+# bower install i18n-phonenumbers
 ```
 
-Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s in the repository root or use [rawgit](https://rawgit.com).
+Otherwise you can simply grab `*.i18n.phonenumbers.min.js` file/s or use [rawgit](https://rawgit.com).
 
 ```html
-<script src="https://cdn.rawgit.com/leodido/i18n.phonenumbers.js/master/i18n.phonenumbers.min.js"></script>
+<script src="https://cdn.rawgit.com/leodido/i18n.phonenumbers.js/master/dist/i18n.phonenumbers.min.js"></script>
 ```
 
 Overview
@@ -116,7 +123,7 @@ Exported on `leodido.i18n.PhoneNumbers` object:
 
     As above but gives us additional info about the provided phone number.
 
-The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Google's `i18n.phonenumbers.AsYouTypeFormatter`. It can be used to format phone numbers on-the-fly when users enter each digit, with this functions:
+The exported object `leodido.i18n.AsYouTypeFormatter` is a proxy to Google's `i18n.phonenumbers.AsYouTypeFormatter`. It can be used to format phone numbers on-the-fly when users enter each digit, with this functions:
 
 * `inputDigit(nextChar)`
 
@@ -132,7 +139,7 @@ The exported object `leodido.i18n.AsYouTypeFormatter` is a simple proxy to Googl
 
 #### Examples
 
-In the `demo` directory you can find examples covering phone number validation, formatting (as you type or one shot) and generation.
+In the **demo** directory you can find examples covering phone number validation, formatting (as you type or one shot) and generation.
 
 Update
 ------
@@ -146,22 +153,19 @@ Or simply **DIY**.
 1. Clone this repo
 
     ```
-    $ git clone git@github.com:leodido/ni18n.phonenumbers.js.git
-    $ cd i18n.phonenumbers.js/
+    # git clone git@github.com:leodido/ni18n.phonenumbers.js.git
+    # cd i18n.phonenumbers.js/
     ```
 
 2. Install it locally (you will need `npm`, of course) ...
     
     ```
-    $ npm install
+    # npm install
     ```
 
-3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**.
+3. Build it against the last grabbed release of libphonenumber (see below) and **make me a PR**. I'll be happy to merge it.
 
-    ```
-    $ make patch
-    $ make release
-    ```
+Makefile contains helpers to upgrade the library.
 
 Build
 -----

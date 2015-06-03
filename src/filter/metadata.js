@@ -115,11 +115,11 @@ var MetadataFilter = function(countries) {
   // Privileged
   return {
     /**
-     * @expose
+     * @nocollapse
      */
     map: newCountryCodeToRegionCodeMap,
     /**
-     * @expose
+     * @nocollapse
      */
     data: newMetadata
   };
