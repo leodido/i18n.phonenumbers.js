@@ -6,9 +6,9 @@
     "Leo Di Donato <leodidonato@gmail.com> (http://git.io/leodido)"
   ],
   "main": [
-    "i18n.phonenumbers.min.js",
-    "lite.i18n.phonenumbers.min.js",
-    "eu.extended.i18n.phonenumbers.min.js"
+    "dist/i18n.phonenumbers.min.js",
+    "dist/lite.i18n.phonenumbers.min.js",
+    "dist/eu.extended.i18n.phonenumbers.min.js"
   ],
   "license": "Apache-2.0",
   "repository": {
