@@ -153,7 +153,7 @@ Or simply **DIY**.
 1. Clone this repo
 
     ```
-    # git clone git@github.com:leodido/ni18n.phonenumbers.js.git
+    # git clone git@github.com:leodido/i18n.phonenumbers.js.git
     # cd i18n.phonenumbers.js/
     ```
 
